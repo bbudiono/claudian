@@ -8,9 +8,10 @@
 import type { Plugin } from 'obsidian';
 import { Notice } from 'obsidian';
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
 
-const VAULT_PATH = path.join(process.env.HOME || '', 'nexus-vault');
+const VAULT_PATH = path.join(os.homedir(), 'nexus-vault');
 
 export function registerVaultCommands(plugin: Plugin): void {
   plugin.addCommand({
@@ -139,11 +140,17 @@ function ingestFile(filePath: string): void {
   const baseName = path.basename(filePath);
   const destPath = path.join(destDir, `${today}-${baseName}`);
 
+  // SEC-1: Sanitize path to prevent traversal (e.g., ../../etc/passwd)
+  const resolvedSource = path.resolve(VAULT_PATH, filePath);
+  if (!resolvedSource.startsWith(VAULT_PATH)) {
+    new Notice(`Ingest blocked: path escapes vault boundary.`);
+    return;
+  }
+
   try {
     fs.mkdirSync(destDir, { recursive: true });
-    const sourcePath = path.join(VAULT_PATH, filePath);
-    if (fs.existsSync(sourcePath)) {
-      fs.copyFileSync(sourcePath, destPath);
+    if (fs.existsSync(resolvedSource)) {
+      fs.copyFileSync(resolvedSource, destPath);
       new Notice(`Ingested ${baseName} to raw/imports/`);
     } else {
       new Notice(`File not found: ${filePath}`);

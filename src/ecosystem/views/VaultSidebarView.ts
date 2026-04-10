@@ -13,7 +13,10 @@
 
 import { ItemView, type Plugin, type WorkspaceLeaf } from 'obsidian';
 import * as fs from 'fs';
+import * as os from 'os';
 import * as path from 'path';
+// @ts-expect-error — CSS module import handled by esbuild, not tsc
+import './vault-sidebar.css';
 
 export const VIEW_TYPE_VAULT_SIDEBAR = 'nexus-vault-sidebar';
 
@@ -81,8 +84,8 @@ export class VaultSidebarView extends ItemView {
   private detectVaultPath(): string {
     // Check standard vault locations
     const candidates = [
-      path.join(process.env.HOME || '', 'nexus-vault'),
-      path.join(process.env.HOME || '', 'Library', 'CloudStorage', 'Dropbox', 'nexus-vault'),
+      path.join(os.homedir(), 'nexus-vault'),
+      path.join(os.homedir(), 'Library', 'CloudStorage', 'Dropbox', 'nexus-vault'),
     ];
     for (const candidate of candidates) {
       if (fs.existsSync(path.join(candidate, '.obsidian'))) {
@@ -95,18 +98,18 @@ export class VaultSidebarView extends ItemView {
   private async refresh(): Promise<void> {
     this.state.lastRefresh = new Date().toISOString();
 
-    // Load hot cache
+    // Load hot cache (async to avoid blocking UI thread — ARCH-1 fix)
     const ecosystemCachePath = path.join(this.state.vaultPath, 'meta', 'hot-cache', 'ecosystem.md');
     try {
-      this.state.hotCacheContent = fs.readFileSync(ecosystemCachePath, 'utf-8');
+      this.state.hotCacheContent = await fs.promises.readFile(ecosystemCachePath, 'utf-8');
     } catch {
       this.state.hotCacheContent = '*No ecosystem cache found. Run `/vault` to initialize.*';
     }
 
-    // Load entity index
+    // Load entity index (async — ARCH-1 fix)
     const entityIndexPath = path.join(this.state.vaultPath, 'meta', 'entity-index.json');
     try {
-      const raw = fs.readFileSync(entityIndexPath, 'utf-8');
+      const raw = await fs.promises.readFile(entityIndexPath, 'utf-8');
       const index = JSON.parse(raw);
       this.state.entities = Object.entries(index)
         .map(([name, data]: [string, any]) => ({
@@ -183,7 +186,7 @@ export class VaultSidebarView extends ItemView {
 
     const actions = [
       { label: 'Refresh', icon: 'refresh-cw', action: () => { this.refresh(); this.render(); } },
-      { label: 'Vault Status', icon: 'info', action: () => { /* TODO: open vault status modal */ } },
+      { label: 'Vault Status', icon: 'info', action: () => { (this.plugin.app as any).commands?.executeCommandById('vault-status'); } },
     ];
 
     for (const act of actions) {
