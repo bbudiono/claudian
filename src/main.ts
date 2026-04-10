@@ -36,6 +36,7 @@ import { setLocale } from './i18n/i18n';
 import type { Locale } from './i18n/types';
 import { buildCursorContext } from './utils/editor';
 import { getVaultPath } from './utils/path';
+import { registerEcosystemExtensions } from './ecosystem';
 
 export default class ClaudianPlugin extends Plugin {
   settings!: ClaudianSettings;
@@ -50,6 +51,9 @@ export default class ClaudianPlugin extends Plugin {
       VIEW_TYPE_CLAUDIAN,
       (leaf) => new ClaudianView(leaf, this)
     );
+
+    // Nexus Vault ecosystem layer (additive — src/ecosystem/)
+    registerEcosystemExtensions(this);
 
     this.addRibbonIcon('bot', 'Open Claudian', () => {
       this.activateView();
