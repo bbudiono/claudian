@@ -175,6 +175,19 @@ Licensed under the [MIT License](LICENSE).
  </picture>
 </a>
 
+## Nexus Vault Ecosystem Layer (Fork Extension)
+
+This fork (`bbudiono/claudian`) adds an **ecosystem layer** in `src/ecosystem/` that integrates with the [Nexus Vault](https://github.com/bbudiono/nexus-vault) offline-first Obsidian knowledge brain. The ecosystem layer is additive — it does NOT modify upstream core files and can be cleanly merged with upstream updates.
+
+**Features added:**
+- **Vault Sidebar** — right-panel view showing hot cache content, entity graph (sorted by mention count), and quick actions
+- **5 Vault Commands** — Cmd+P accessible: vault status, refresh cache, open today's daily note, list entities, ingest current file
+- **Entity Click Navigation** — click entity names in the sidebar to open their wiki pages
+
+**Upstream sync:** `git fetch upstream && git merge upstream/main` — no core files modified, merge conflicts unlikely.
+
+**Tests:** `npx jest --selectProjects unit --testPathPatterns ecosystem` — 10 tests.
+
 ## Acknowledgments
 
 - [Obsidian](https://obsidian.md) for the plugin API

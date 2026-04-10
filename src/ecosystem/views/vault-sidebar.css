@@ -1,0 +1,109 @@
+/* Nexus Vault Sidebar — ecosystem layer styles */
+
+.vault-sidebar-header {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.vault-sidebar-header h4 {
+  margin: 0 0 4px 0;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.vault-sidebar-timestamp {
+  color: var(--text-muted);
+  font-size: 11px;
+}
+
+.vault-sidebar-section {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--background-modifier-border);
+}
+
+.vault-sidebar-section h5 {
+  margin: 0 0 6px 0;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--text-muted);
+}
+
+.vault-cache-content {
+  max-height: 200px;
+  overflow-y: auto;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.vault-cache-line {
+  padding: 1px 0;
+  color: var(--text-normal);
+}
+
+.vault-entity-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.vault-entity-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 12px;
+}
+
+.vault-entity-name {
+  flex: 1;
+  font-weight: 500;
+}
+
+.vault-entity-link {
+  cursor: pointer;
+  color: var(--text-accent);
+}
+
+.vault-entity-link:hover {
+  text-decoration: underline;
+}
+
+.vault-entity-type {
+  font-size: 10px;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: var(--background-modifier-border);
+  color: var(--text-muted);
+}
+
+.vault-entity-mentions {
+  font-size: 11px;
+  color: var(--text-muted);
+  min-width: 20px;
+  text-align: right;
+}
+
+.vault-entity-empty {
+  color: var(--text-muted);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.vault-action-btn {
+  display: block;
+  width: 100%;
+  margin: 4px 0;
+  padding: 6px 12px;
+  font-size: 12px;
+  text-align: left;
+  background: var(--interactive-normal);
+  border: 1px solid var(--background-modifier-border);
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--text-normal);
+}
+
+.vault-action-btn:hover {
+  background: var(--interactive-hover);
+}
